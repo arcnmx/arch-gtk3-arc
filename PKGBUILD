@@ -61,7 +61,8 @@ build() {
         --enable-x11-backend \
         --enable-broadway-backend \
         --enable-wayland-backend \
-        --enable-gtk-doc
+        --enable-gtk-doc=no \
+        --enable-gtk-doc-html=no
 
     #https://bugzilla.gnome.org/show_bug.cgi?id=655517
     sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
