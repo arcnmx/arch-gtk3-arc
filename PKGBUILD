@@ -1,6 +1,6 @@
 # Maintainer: twilinx <twilinx@mesecons.net>
 
-pkgname=gtk3-typeahead
+pkgname=gtk3-arc
 pkgver=3.22.24
 pkgrel=1
 conflicts=(gtk3)
@@ -22,23 +22,37 @@ _commit=e72d54c8a7bdf5f41feccbcc0b78522a8b50d79e  # tags/3.22.24^0
 source=("git://git.gnome.org/gtk+#commit=$_commit"
         settings.ini
         gtk-query-immodules-3.0.hook
-        typeahead.patch)
+        typeahead.patch
+        paste-selection.patch
+        paste-selection-fix.patch
+        shift-insert.patch)
 sha256sums=('SKIP'
             '01fc1d81dc82c4a052ac6e25bf9a04e7647267cc3017bc91f9ce3e63e5eb9202'
             'de46e5514ff39a7a65e01e485e874775ab1c0ad20b8e94ada43f4a6af1370845'
-            '5006fa1dcea9aa74766196ec5c18e5172d7287195c2a49ffcd0adc13bc6e62c1')
+            '5006fa1dcea9aa74766196ec5c18e5172d7287195c2a49ffcd0adc13bc6e62c1'
+            '4273c017f3dd061dccf8c4b1da8a5e13c697a10f9c143cd3bcac5a1c2c99f51a'
+            '495a8e588e3a454fc94e417e0be91ffc5176389b4e590e94c6017d9e12de5297'
+            'e5ae764587512a39ac3c84f01205ae458ab94cf22468beafcab841578ad38744')
 
 prepare() {
-    cd gtk+
+    cd "$srcdir/gtk+"
 
     # Typeahead-specific changes
-    patch gtk/gtkfilechooserwidget.c -i $srcdir/typeahead.patch
+    patch gtk/gtkfilechooserwidget.c -i "$srcdir/typeahead.patch"
+
+    # Shift-Insert selection paste
+    patch -p0 < "$srcdir/paste-selection.patch"
+    patch -p0 < "$srcdir/paste-selection-fix.patch"
+    patch -p0 < "$srcdir/shift-insert.patch"
 
     NOCONFIGURE=1 ./autogen.sh
 }
 
 build() {
-    cd gtk+
+    cd "$srcdir/gtk+"
+
+    # Fix for gdbus-codegen
+    export PYTHONPATH="/usr/share/glib-2.0"
 
     CXX=/bin/false ./configure --prefix=/usr \
         --sysconfdir=/etc \
@@ -52,13 +66,13 @@ build() {
     #https://bugzilla.gnome.org/show_bug.cgi?id=655517
     sed -i -e 's/ -shared / -Wl,-O1,--as-needed\0/g' libtool
 
-    make -j4
+    make
 }
 
 package() {
     install=gtk3.install
 
-    cd gtk+
+    cd "$srcdir/gtk+"
     make DESTDIR="$pkgdir" install
     install -Dm644 ../settings.ini "$pkgdir/usr/share/gtk-3.0/settings.ini"
     install -Dm644 ../gtk-query-immodules-3.0.hook "$pkgdir/usr/share/libalpm/hooks/gtk-query-immodules-3.0.hook"
