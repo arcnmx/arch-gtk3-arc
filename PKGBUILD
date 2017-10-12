@@ -25,14 +25,16 @@ source=("git://git.gnome.org/gtk+#commit=$_commit"
         typeahead.patch
         paste-selection.patch
         paste-selection-fix.patch
-        shift-insert.patch)
+        shift-insert.patch
+        kde-server-decoration.patch)
 sha256sums=('SKIP'
             '01fc1d81dc82c4a052ac6e25bf9a04e7647267cc3017bc91f9ce3e63e5eb9202'
             'de46e5514ff39a7a65e01e485e874775ab1c0ad20b8e94ada43f4a6af1370845'
             '5006fa1dcea9aa74766196ec5c18e5172d7287195c2a49ffcd0adc13bc6e62c1'
             '4273c017f3dd061dccf8c4b1da8a5e13c697a10f9c143cd3bcac5a1c2c99f51a'
             '495a8e588e3a454fc94e417e0be91ffc5176389b4e590e94c6017d9e12de5297'
-            'e5ae764587512a39ac3c84f01205ae458ab94cf22468beafcab841578ad38744')
+            'e5ae764587512a39ac3c84f01205ae458ab94cf22468beafcab841578ad38744'
+            '58642d55853cbe112942aa6bf90527a83aab33965bf59ac67b25b9bfca5e7f60')
 
 prepare() {
     cd "$srcdir/gtk+"
@@ -44,6 +46,9 @@ prepare() {
     patch -p0 < "$srcdir/paste-selection.patch"
     patch -p0 < "$srcdir/paste-selection-fix.patch"
     patch -p0 < "$srcdir/shift-insert.patch"
+
+	# KDE wayland server decoration protocol
+    patch -p1 < "$srcdir/kde-server-decoration.patch"
 
     NOCONFIGURE=1 ./autogen.sh
 }

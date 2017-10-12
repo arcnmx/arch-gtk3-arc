@@ -51,6 +51,7 @@ pkgbase = gtk3-arc
 	source = paste-selection.patch
 	source = paste-selection-fix.patch
 	source = shift-insert.patch
+	source = kde-server-decoration.patch
 	sha256sums = SKIP
 	sha256sums = 01fc1d81dc82c4a052ac6e25bf9a04e7647267cc3017bc91f9ce3e63e5eb9202
 	sha256sums = de46e5514ff39a7a65e01e485e874775ab1c0ad20b8e94ada43f4a6af1370845
@@ -58,6 +59,7 @@ pkgbase = gtk3-arc
 	sha256sums = 4273c017f3dd061dccf8c4b1da8a5e13c697a10f9c143cd3bcac5a1c2c99f51a
 	sha256sums = 495a8e588e3a454fc94e417e0be91ffc5176389b4e590e94c6017d9e12de5297
 	sha256sums = e5ae764587512a39ac3c84f01205ae458ab94cf22468beafcab841578ad38744
+	sha256sums = 58642d55853cbe112942aa6bf90527a83aab33965bf59ac67b25b9bfca5e7f60
 
 pkgname = gtk3-arc
 	install = gtk3.install
